@@ -9,7 +9,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copie o arquivo JAR para o contêiner
-COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+COPY target/testjenkins-0.0.1-SNAPSHOT.jar app.jar
 
 # Exponha a porta 8080
 EXPOSE 8080
