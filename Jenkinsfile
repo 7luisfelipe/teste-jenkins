@@ -31,14 +31,14 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                script {
+        //stage('Push Docker Image') {
+            //steps {
+                //script {
                     // Este passo é opcional. Caso queira enviar a imagem para um repositório (ex: Docker Hub)
                     // sh 'docker push ${DOCKER_IMAGE}:${DOCKER_TAG}'
-                }
-            }
-        }
+                //}
+            //}
+        //}
 
         stage('Run Docker Container') {
             steps {
