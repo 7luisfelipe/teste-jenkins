@@ -9,6 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                git credentialsId: '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', url: 'https://github.com/7luisfelipe/teste-jenkins'
                 // Clonar o repositório
                 git url: 'https://github.com/7luisfelipe/teste-jenkins', branch: 'main'
             }
