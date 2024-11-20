@@ -9,13 +9,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                //checkout scm
+                checkout scm
             }
         }
 
         stage('Build JAR') {
             steps {
                 script {
+                    // Rodando o Maven para compilar o projeto e criar o JAR
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -24,6 +25,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Construindo a imagem Docker a partir do Dockerfile
                     sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
                 }
             }
@@ -32,8 +34,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Aqui você pode configurar para enviar a imagem para um repositório como Docker Hub ou AWS ECR
-                    // Exemplo:
+                    // Este passo é opcional. Caso queira enviar a imagem para um repositório (ex: Docker Hub)
                     // sh 'docker push ${DOCKER_IMAGE}:${DOCKER_TAG}'
                 }
             }
@@ -42,7 +43,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Rodar o container
+                    // Rodando o container
                     sh 'docker run -d -p 8080:8080 ${DOCKER_IMAGE}:${DOCKER_TAG}'
                 }
             }
@@ -60,7 +61,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Limpar arquivos de trabalho
+            cleanWs()  // Limpa os arquivos de trabalho após a execução
         }
     }
 }
