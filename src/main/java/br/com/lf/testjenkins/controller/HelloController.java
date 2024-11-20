@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/v1/hello", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/hello", produces = MediaType.APPLICATION_JSON_VALUE)
 public class HelloController {
 
     @GetMapping
