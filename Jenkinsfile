@@ -2,49 +2,65 @@ pipeline {
     agent any
 
     environment {
-        // Nome da imagem Docker para identificar o contêiner
-        IMAGE_NAME = "hello-jenkins-api"
+        DOCKER_IMAGE = "my-api-image"
+        DOCKER_TAG = "latest"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                //auth
-                git branch: 'main',
-                    url: 'https://github.com/7luisfelipe/teste-jenkins',
-                    credentialsId: 'token_git'
-                // Clonar o repositório
-                git url: 'https://github.com/7luisfelipe/teste-jenkins', branch: 'main'
+                //checkout scm
             }
         }
-        stage('Build with Maven') {
+
+        stage('Build JAR') {
             steps {
-                // Rodar Maven para construir o artefato
-                sh 'mvn clean package'
+                script {
+                    sh 'mvn clean package -DskipTests'
+                }
             }
         }
+
         stage('Build Docker Image') {
             steps {
-                // Construir a imagem Docker
-                sh "docker build -t ${IMAGE_NAME} ."
+                script {
+                    sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
+                }
             }
         }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    // Aqui você pode configurar para enviar a imagem para um repositório como Docker Hub ou AWS ECR
+                    // Exemplo:
+                    // sh 'docker push ${DOCKER_IMAGE}:${DOCKER_TAG}'
+                }
+            }
+        }
+
         stage('Run Docker Container') {
             steps {
-                // Remover contêiner anterior (se existir) e rodar um novo
-                sh """
-                docker rm -f hello-jenkins || true
-                docker run -d --name hello-jenkins -p 8080:8080 ${IMAGE_NAME}
-                """
+                script {
+                    // Rodar o container
+                    sh 'docker run -d -p 8080:8080 ${DOCKER_IMAGE}:${DOCKER_TAG}'
+                }
+            }
+        }
+
+        stage('Test API') {
+            steps {
+                script {
+                    // Teste simples para verificar se o endpoint está funcionando
+                    sh 'curl -f http://localhost:8080/hello'
+                }
             }
         }
     }
 
     post {
         always {
-            // Mostrar o status do contêiner para fins de debug
-            sh 'docker ps -a'
+            cleanWs()  // Limpar arquivos de trabalho
         }
     }
 }
-
