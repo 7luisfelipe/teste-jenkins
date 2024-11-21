@@ -50,14 +50,14 @@ pipeline {
             //}
         //}
 
-        stage('Run Docker Container') {
+        stage('Run Docker Compose') {
             steps {
                 script {
-                    // Rodando o container
-                    sh 'docker run -d --name ${DOCKER_CONTAINER} -p 8081:8081 ${DOCKER_IMAGE}:${DOCKER_TAG}'
+                    // Inicia os containers usando Docker Compose
+                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
 
-                    // Esperar o container iniciar (adicionar uma pausa se necessário)
-                    //sleep 10
+                    // Espera o container iniciar (adicionar uma pausa, se necessário)
+                    sleep(time: 30, unit: 'SECONDS')
                 }
             }
         }
@@ -65,26 +65,12 @@ pipeline {
         stage('Test API') {
             steps {
                 script {
-                    //Teste simples para verificar se o endpoint está funcionando
-                    //sh 'curl -f http://localhost:8081/hello'
-
-                    // Aguardando um tempo maior para garantir que o container iniciou
-                    //sleep 20
-                    // Teste simples para verificar se o endpoint está funcionando
-                    //sh '''
-                        //if ! curl -f http://localhost:8081/hello; then
-                            //echo "Failed to connect to service. Checking container logs..."
-                            //docker logs ${DOCKER_CONTAINER}
-                            //exit 1
-                        //fi
-                    //'''
-
-                    // Aumentar o tempo de espera para garantir que o Spring Boot tenha tempo suficiente para iniciar
-                    sleep(time: 30, unit: 'SECONDS')
                     try {
-                        sh 'curl -v -f http://${DOCKER_CONTAINER}:8081/hello'
+                        // Teste simples para verificar se o endpoint está funcionando
+                        sh 'curl -v -f http://localhost:8081/hello'
+                        echo 'API test passed'
                     } catch (Exception e) {
-                        echo "Falha ao se conectar o sever. buscando logs do container..."
+                        echo "Falha ao se conectar ao servidor. Buscando logs do container..."
                         sh "docker logs ${DOCKER_CONTAINER}"
                         error "Teste de API falhou"
                     }
@@ -95,7 +81,17 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Limpa os arquivos de trabalho após a execução
+            // Limpa os arquivos de trabalho após a execução
+            cleanWs()
+
+            // Parar e remover o container usando Docker Compose
+            sh "docker-compose -f ${DOCKER_COMPOSE_FILE} down"
         }
+        //failure {
+            // Enviar um e-mail ou realizar outra ação em caso de falha
+            //mail to: 'you@example.com',
+                //subject: "Pipeline failed",
+                //body: "The pipeline failed during the test stage."
+        //}
     }
 }

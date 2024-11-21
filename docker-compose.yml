@@ -4,3 +4,9 @@ services:
     build: .
     ports:
       - "8081:8081"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
