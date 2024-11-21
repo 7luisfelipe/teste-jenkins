@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE = "my-api-image"
         DOCKER_CONTAINER = "my-api-container"
         DOCKER_TAG = "latest"
+        DOCKER_COMPOSE_FILE = "docker-compose.yml"
     }
 
     stages {
@@ -61,14 +62,14 @@ pipeline {
             }
         }
 
-        //stage('Test API') {
-        //    steps {
-        //        script {
-                    // Teste simples para verificar se o endpoint está funcionando
-                    //sh 'curl -f http://${DOCKER_CONTAINER}:8081/hello'
-        //        }
-        //    }
-        //}
+        stage('Test API') {
+            steps {
+                script {
+                    //Teste simples para verificar se o endpoint está funcionando
+                    sh 'curl -f http://localhost:8081/hello'
+                }
+            }
+        }
     }
 
     post {
