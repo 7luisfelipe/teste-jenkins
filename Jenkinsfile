@@ -69,15 +69,25 @@ pipeline {
                     //sh 'curl -f http://localhost:8081/hello'
 
                     // Aguardando um tempo maior para garantir que o container iniciou
-                    sleep 20
+                    //sleep 20
                     // Teste simples para verificar se o endpoint está funcionando
-                    sh '''
-                        if ! curl -f http://localhost:8081/hello; then
-                            echo "Failed to connect to service. Checking container logs..."
-                            docker logs ${DOCKER_CONTAINER}
-                            exit 1
-                        fi
-                    '''
+                    //sh '''
+                        //if ! curl -f http://localhost:8081/hello; then
+                            //echo "Failed to connect to service. Checking container logs..."
+                            //docker logs ${DOCKER_CONTAINER}
+                            //exit 1
+                        //fi
+                    //'''
+
+                    // Aumentar o tempo de espera para garantir que o Spring Boot tenha tempo suficiente para iniciar
+                    sleep(time: 30, unit: 'SECONDS')
+                    try {
+                        sh 'curl -f http://localhost:8081/hello'
+                    } catch (Exception e) {
+                        echo "Falha ao se conectar o sever. buscando logs do container..."
+                        sh "docker logs ${DOCKER_CONTAINER}"
+                        error "Teste de API falhou"
+                    }
                 }
             }
         }
