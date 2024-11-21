@@ -80,7 +80,7 @@ pipeline {
                     //'''
 
                     // Aumentar o tempo de espera para garantir que o Spring Boot tenha tempo suficiente para iniciar
-                    sleep(time: 30, unit: 'SECONDS')
+                    sleep(time: 300, unit: 'SECONDS')
                     try {
                         sh 'curl -f http://localhost:8081/hello'
                     } catch (Exception e) {
