@@ -65,7 +65,7 @@ pipeline {
             steps {
                 script {
                     // Teste simples para verificar se o endpoint está funcionando
-                    sh 'curl -f http://localhost:8081/hello'
+                    sh 'curl -f http://${DOCKER_CONTAINER}:8081/hello'
                 }
             }
         }
