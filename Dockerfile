@@ -12,7 +12,7 @@ WORKDIR /app
 COPY target/testjenkins-0.0.1-SNAPSHOT.jar app.jar
 
 # Exponha a porta 8080
-EXPOSE 8080
+EXPOSE 8081
 
 # Comando para rodar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
