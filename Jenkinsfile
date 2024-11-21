@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     // Rodando o container
-                    sh 'docker run -d -p 8080:8080 ${DOCKER_IMAGE}:${DOCKER_TAG}'
+                    sh 'docker run -d -p 8081:8081 ${DOCKER_IMAGE}:${DOCKER_TAG}'
                 }
             }
         }
@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     // Teste simples para verificar se o endpoint está funcionando
-                    sh 'curl -f http://localhost:8080/hello'
+                    sh 'curl -f http://localhost:8081/hello'
                 }
             }
         }
