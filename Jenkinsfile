@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "my-api-image"
+        DOCKER_CONTAINER = "my-api-container"
         DOCKER_TAG = "latest"
     }
 
@@ -27,9 +28,9 @@ pipeline {
                 script {
                     // Remover container em execução previamente
                     sh '''
-                        if [ $(docker ps -q -f name=api-container) ]; then
-                            docker stop api-container
-                            docker rm api-container
+                        if [ $(docker ps -q -f name=${DOCKER_CONTAINER}) ]; then
+                            docker stop ${DOCKER_CONTAINER}
+                            docker rm ${DOCKER_CONTAINER}
                         fi
                     '''
 
@@ -52,7 +53,7 @@ pipeline {
             steps {
                 script {
                     // Rodando o container
-                    sh 'docker run -d --name api-container -p 8081:8081 ${DOCKER_IMAGE}:${DOCKER_TAG}'
+                    sh 'docker run -d --name ${DOCKER_CONTAINER} -p 8081:8081 ${DOCKER_IMAGE}:${DOCKER_TAG}'
 
                     // Esperar o container iniciar (adicionar uma pausa se necessário)
                     sleep 10
