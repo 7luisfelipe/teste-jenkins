@@ -74,7 +74,7 @@ pipeline {
                     sh '''
                         if ! curl -f http://localhost:8081/hello; then
                             echo "Failed to connect to service. Checking container logs..."
-                            docker-compose -f ${DOCKER_COMPOSE_FILE} logs
+                            docker logs ${DOCKER_CONTAINER}
                             exit 1
                         fi
                     '''
