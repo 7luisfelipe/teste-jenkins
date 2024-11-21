@@ -5,7 +5,7 @@ pipeline {
         DOCKER_IMAGE = "my-api-image"
         DOCKER_CONTAINER = "my-api-container"
         DOCKER_TAG = "latest"
-        DOCKER_COMPOSE_FILE = "docker-compose.yml"
+        DOCKER_COMPOSE_FILE = "docker-compose"
     }
 
     stages {
