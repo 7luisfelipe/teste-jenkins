@@ -14,7 +14,7 @@ public class HelloController {
     @GetMapping
     public ResponseEntity<String> getHello(){
         return new ResponseEntity<>(
-                "Successo",
+                "Successo - Aplicação rodando no jenkins",
                 HttpStatus.OK
         );
     }
