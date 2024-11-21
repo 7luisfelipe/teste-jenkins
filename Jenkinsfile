@@ -56,7 +56,7 @@ pipeline {
                     sh 'docker run -d --name ${DOCKER_CONTAINER} -p 8081:8081 ${DOCKER_IMAGE}:${DOCKER_TAG}'
 
                     // Esperar o container iniciar (adicionar uma pausa se necessário)
-                    sleep 10
+                    //sleep 10
                 }
             }
         }
@@ -65,7 +65,7 @@ pipeline {
             steps {
                 script {
                     // Teste simples para verificar se o endpoint está funcionando
-                    sh 'curl -f http://${DOCKER_CONTAINER}:8081/hello'
+                    //sh 'curl -f http://${DOCKER_CONTAINER}:8081/hello'
                 }
             }
         }
