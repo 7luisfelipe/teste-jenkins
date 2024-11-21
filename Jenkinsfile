@@ -57,7 +57,7 @@ pipeline {
                     sh 'docker run -d --name ${DOCKER_CONTAINER} -p 8081:8081 ${DOCKER_IMAGE}:${DOCKER_TAG}'
 
                     // Esperar o container iniciar (adicionar uma pausa se necessário)
-                    sleep 10
+                    //sleep 10
                 }
             }
         }
@@ -66,7 +66,18 @@ pipeline {
             steps {
                 script {
                     //Teste simples para verificar se o endpoint está funcionando
-                    sh 'curl -f http://localhost:8081/hello'
+                    //sh 'curl -f http://localhost:8081/hello'
+
+                    // Aguardando um tempo maior para garantir que o container iniciou
+                    sleep 20
+                    // Teste simples para verificar se o endpoint está funcionando
+                    sh '''
+                        if ! curl -f http://localhost:8081/hello; then
+                            echo "Failed to connect to service. Checking container logs..."
+                            docker-compose -f ${DOCKER_COMPOSE_FILE} logs
+                            exit 1
+                        fi
+                    '''
                 }
             }
         }
