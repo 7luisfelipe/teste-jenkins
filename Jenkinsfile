@@ -25,6 +25,14 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Remover container em execução previamente
+                    sh '''
+                        if [ $(docker ps -q -f name=api-container) ]; then
+                            docker stop api-container
+                            docker rm api-container
+                        fi
+                    '''
+
                     // Construindo a imagem Docker a partir do Dockerfile
                     sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
                 }
@@ -44,7 +52,10 @@ pipeline {
             steps {
                 script {
                     // Rodando o container
-                    sh 'docker run -d -p 8081:8081 ${DOCKER_IMAGE}:${DOCKER_TAG}'
+                    sh 'docker run -d --name api-container -p 8081:8081 ${DOCKER_IMAGE}:${DOCKER_TAG}'
+
+                    // Esperar o container iniciar (adicionar uma pausa se necessário)
+                    sleep 10
                 }
             }
         }
