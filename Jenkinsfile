@@ -57,7 +57,7 @@ pipeline {
                     sh 'docker run -d --name ${DOCKER_CONTAINER} -p 8081:8081 ${DOCKER_IMAGE}:${DOCKER_TAG}'
 
                     // Esperar o container iniciar (adicionar uma pausa se necessário)
-                    //sleep 10
+                    sleep 10
                 }
             }
         }
