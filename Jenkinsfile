@@ -80,9 +80,9 @@ pipeline {
                     //'''
 
                     // Aumentar o tempo de espera para garantir que o Spring Boot tenha tempo suficiente para iniciar
-                    sleep(time: 300, unit: 'SECONDS')
+                    sleep(time: 30, unit: 'SECONDS')
                     try {
-                        sh 'curl -f http://localhost:8081/hello'
+                        sh 'curl -v -f http://${DOCKER_CONTAINER}:8081/hello'
                     } catch (Exception e) {
                         echo "Falha ao se conectar o sever. buscando logs do container..."
                         sh "docker logs ${DOCKER_CONTAINER}"
