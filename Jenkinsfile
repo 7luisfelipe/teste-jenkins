@@ -8,7 +8,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                //checkout scm
+                // Clonar o repositório
+                git url: 'https://github.com/7luisfelipe/teste-jenkins', branch: 'main'
             }
         }
 
@@ -28,7 +30,7 @@ pipeline {
                     sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up --build -d"
 
                     // Espera o container iniciar (adicionar uma pausa, se necessário)
-                    sleep(time: 30, unit: 'SECONDS')
+                    //sleep(time: 30, unit: 'SECONDS')
                 }
             }
         }
@@ -42,7 +44,7 @@ pipeline {
                         echo 'API test passed'
                     } catch (Exception e) {
                         echo "Falha ao se conectar ao servidor. Buscando logs do container..."
-                        sh "docker logs ${DOCKER_CONTAINER}"
+                        //sh "docker logs ${DOCKER_CONTAINER}"
                         error "Teste de API falhou"
                     }
                 }
